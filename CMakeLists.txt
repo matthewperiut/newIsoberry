@@ -17,10 +17,10 @@ endif(${CMAKE_SYSTEM} MATCHES "Linux")
 
 file (GLOB MY_SRC
         "main.cpp"
-        "game/network/crypto/*.cpp"
-        "game/network/crypto/*.h"
         "game/network/*.cpp"
         "game/network/*.h"
+        "game/physics/*.cpp"
+        "game/physics/*.h"
         "game/tools/settings/*.cpp"
         "game/tools/settings/*.h"
         "game/tools/asset/*.cpp"
@@ -34,7 +34,8 @@ if (WIN32 OR LINUX)
 endif (WIN32 OR LINUX)
 
 if (APPLE)
-    add_compile_options(-stdlib=libc++ -framework Carbon)
+    add_compile_definitions(GL_SILENCE_DEPRECATION)
+    add_compile_options(-stdlib=libc++)
 
     set(CUR_TARGET Isoberry)
     set(MACOSX_BUNDLE_ICON_FILE isoberry.icns)
@@ -54,32 +55,6 @@ if (APPLE)
             )
 endif(APPLE)
 
-if (UNIX)
-    # X11
-    if(LINUX)
-        find_package(X11 REQUIRED)
-        include_directories(${X11_INCLUDE_DIR})
-        link_directories(${X11_LIBRARIES})
-        target_link_libraries(Isoberry ${X11_LIBRARIES})
-    endif(LINUX)
-    # GLUT
-    if(APPLE)
-        find_package(GLUT REQUIRED)
-        include_directories(${GLUT_INCLUDE_DIR})
-        link_directories(${GLUT_LIBRARIES})
-        target_link_libraries(Isoberry ${GLUT_LIBRARIES})
-    endif(APPLE)
-
-    find_package(OpenGL REQUIRED)
-    include_directories(${OPENGL_INCLUDE_DIR})
-    link_directories(${OPENGL_LIBRARIES})
-    target_link_libraries(Isoberry ${OPENGL_LIBRARIES})
-
-    set(THREADS_PREFER_PTHREAD_FLAG ON)
-    find_package(Threads REQUIRED)
-    target_link_libraries(Isoberry Threads::Threads)
-endif (UNIX)
-
 # yojimbo
 file(COPY game/external/assistance/yojimbo/CMakeLists.txt DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/game/external/yojimbo)
 
@@ -94,4 +69,30 @@ elseif(UNIX)
 endif()
 
 add_subdirectory(game/external/yojimbo EXCLUDE_FROM_ALL)
-target_link_directories(Isoberry PRIVATE yojimbo)
+target_link_libraries(Isoberry PRIVATE yojimbo)
+
+if (UNIX)
+    # X11
+    if(LINUX)
+        find_package(X11 REQUIRED)
+        include_directories(${X11_INCLUDE_DIR})
+        link_directories(${X11_LIBRARIES})
+        target_link_libraries(Isoberry PRIVATE ${X11_LIBRARIES})
+    endif(LINUX)
+    # GLUT
+    if(APPLE)
+        find_package(GLUT REQUIRED)
+        include_directories(${GLUT_INCLUDE_DIR})
+        link_directories(${GLUT_LIBRARIES})
+        target_link_libraries(Isoberry PRIVATE ${GLUT_LIBRARIES})
+    endif(APPLE)
+
+    find_package(OpenGL REQUIRED)
+    include_directories(${OPENGL_INCLUDE_DIR})
+    link_directories(${OPENGL_LIBRARIES})
+    target_link_libraries(Isoberry PRIVATE ${OPENGL_LIBRARIES})
+
+    set(THREADS_PREFER_PTHREAD_FLAG ON)
+    find_package(Threads REQUIRED)
+    target_link_libraries(Isoberry PRIVATE Threads::Threads)
+endif (UNIX)
