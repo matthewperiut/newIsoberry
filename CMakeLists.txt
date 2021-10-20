@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.20)
-set(CMAKE_CXX_STANDARD 23)
+cmake_minimum_required(VERSION 3.19)
+set(CMAKE_CXX_STANDARD 20)
 
 project(Isoberry)
 
@@ -28,10 +28,14 @@ file (GLOB MY_SRC
         "game/*.cpp"
         "game/*.h")
 
-if (WIN32 OR LINUX)
+if (WIN32)
+    add_executable(Isoberry WIN32 ${MY_SRC} "${CMAKE_CURRENT_SOURCE_DIR}/game/icon/isoberry.rc")
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game/icon/isoberry.ico DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets/)
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game/assets/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets/)
+elseif(LINUX)
     add_executable(Isoberry ${MY_SRC})
     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game/assets/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets/)
-endif (WIN32 OR LINUX)
+endif()
 
 if (APPLE)
     add_compile_definitions(GL_SILENCE_DEPRECATION)
@@ -59,7 +63,8 @@ endif(APPLE)
 file(COPY game/external/assistance/yojimbo/CMakeLists.txt DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/game/external/yojimbo)
 
 # Set VCPKG_ROOT
-# vcpkg install libsodium mbedtls
+# (UNIX)    vcpkg install libsodium mbedtls
+# (WINDOWS) vcpkg install libsodium:x64-windows-static mbedtls:x64-windows-static
 if(WIN32)
     SET(VCPKG_ROOT "C:/vcpkg")
 elseif(APPLE)

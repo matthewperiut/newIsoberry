@@ -4,6 +4,12 @@
 #include "game/tools/asset/AssetPath.h"
 Settings settings(GetAssetPath() + "settings.txt");
 
+#include <yojimbo.h>
+
+#ifdef WIN32
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+#endif
+
 int main(int argc, char *argv[])
 {
     for(int i = 0; i < argc; i++)

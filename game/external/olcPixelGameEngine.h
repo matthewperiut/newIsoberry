@@ -3573,6 +3573,8 @@ namespace olc
 #if defined(OLC_IMAGE_STB)
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include "../tools/asset/AssetPath.h"
+
 namespace olc
 {
 	class ImageLoader_STB : public olc::ImageLoader
@@ -3682,7 +3684,7 @@ namespace olc
 		virtual olc::rcode CreateWindowPane(const olc::vi2d& vWindowPos, olc::vi2d& vWindowSize, bool bFullScreen) override
 		{
 			WNDCLASS wc;
-			wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+			wc.hIcon = static_cast<HICON>(LoadImage(NULL, (GetAssetPath()+"isoberry.ico").c_str(), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE));
 			wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 			wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 			wc.hInstance = GetModuleHandle(nullptr);
