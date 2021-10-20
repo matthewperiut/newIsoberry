@@ -1,0 +1,3 @@
+[submodule "game/external/yojimbo"]
+	path = game/external/yojimbo
+	url = https://github.com/networkprotocol/yojimbo.git

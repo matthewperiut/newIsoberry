@@ -17,6 +17,10 @@ endif(${CMAKE_SYSTEM} MATCHES "Linux")
 
 file (GLOB MY_SRC
         "main.cpp"
+        "game/network/crypto/*.cpp"
+        "game/network/crypto/*.h"
+        "game/network/*.cpp"
+        "game/network/*.h"
         "game/tools/settings/*.cpp"
         "game/tools/settings/*.h"
         "game/tools/asset/*.cpp"
@@ -76,6 +80,18 @@ if (UNIX)
     target_link_libraries(Isoberry Threads::Threads)
 endif (UNIX)
 
-find_package(ENet REQUIRED)
-include_directories(${ENET_INCLUDE_DIRS})
-target_link_libraries(Isoberry ${ENET_LIBRARIES})
+# yojimbo
+file(COPY game/external/assistance/yojimbo/CMakeLists.txt DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/game/external/yojimbo)
+
+# Set VCPKG_ROOT
+# vcpkg install libsodium mbedtls
+if(WIN32)
+    SET(VCPKG_ROOT "C:/vcpkg")
+elseif(APPLE)
+    SET(VCPKG_ROOT "/opt/homebrew/Cellar/vcpkg/2021.05.12/libexec")
+elseif(UNIX)
+    SET(VCPKG_ROOT "/home/matthewperiut/Downloads/vcpkg-2021.05.12")
+endif()
+
+add_subdirectory(game/external/yojimbo EXCLUDE_FROM_ALL)
+target_link_directories(Isoberry PRIVATE yojimbo)

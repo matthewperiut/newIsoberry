@@ -10,6 +10,12 @@ Settings::Settings(std::string file)
 {
     resolution = vi2d(NATIVESCREENWIDTH, NATIVESCREENHEIGHT);
 
+    if(!std::filesystem::exists(file))
+    {
+        std::ofstream createFile(file);
+        createFile.close();
+    }
+
     std::ifstream mySettingsFile(file);
     std::string output;
     while(mySettingsFile >> output)
@@ -32,4 +38,5 @@ Settings::Settings(std::string file)
     {
         resolution = GetResolution();
     }
+    mySettingsFile.close();
 }

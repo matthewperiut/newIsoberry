@@ -13,6 +13,8 @@ bool Game::OnUserCreate() {
 }
 
 bool Game::OnUserUpdate(float fElapsedTime) {
+    if (GetKey(olc::ESCAPE).bPressed)
+        return 0;
     return 1;
 }
 
