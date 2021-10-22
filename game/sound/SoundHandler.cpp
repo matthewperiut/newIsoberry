@@ -3,6 +3,7 @@
 //
 
 #include "SoundHandler.h"
+#include "LoadWav.h"
 #include <iostream>
 #include <cstring>
 
@@ -33,8 +34,6 @@ void SoundHandler::OpenDevice()
     if (!alcMakeContextCurrent(context))
         // failed to make context current
         std::cout << "Context was unable to be made" << std::endl;
-
-    alcMakeContextCurrent(context);
 }
 
 void SoundHandler::DefineListener()
@@ -72,8 +71,62 @@ void SoundHandler::GenerateBuffer()
     // check for errors
 }
 
+SoundHandler::SoundHandler()
+{
+    OpenDevice();
+    DefineListener();
+    GenerateSource();
+    GenerateBuffer();
+}
+
 void SoundHandler::LoadSound(std::string filepath)
 {
-    //alutCreateBufferFromFile
-    //alutLoadWAVFile("test.wav", &format, &data, &size, &freq, &loop);
+    alcMakeContextCurrent(context);
+    data = LoadWAV(filepath.c_str(), channel, sampleRate, bps, size);
+    uint8_t format;
+    if (channel == 1)
+    {
+        if (bps == 8)
+        {
+            format = AL_FORMAT_MONO8;
+        }
+        else {
+            format = AL_FORMAT_MONO16;
+        }
+    }
+    else {
+        if (bps == 8)
+        {
+            format = AL_FORMAT_STEREO8;
+        }
+        else {
+            format = AL_FORMAT_STEREO16;
+        }
+    }
+
+    alBufferData(buffer, format, data, size, sampleRate);
+    alGenSources(1, &source);
+    alSourcei(source, AL_BUFFER, buffer);
+}
+
+void SoundHandler::Play()
+{
+    alSourcePlay(source);
+}
+
+void SoundHandler::UnloadSound() const
+{
+    delete[] data;
+}
+
+SoundHandler::~SoundHandler()
+{
+    alDeleteSources(1, &source);
+    alDeleteBuffers(1, &buffer);
+    device = alcGetContextsDevice(context);
+    alcMakeContextCurrent(NULL);
+    alcDestroyContext(context);
+    alcCloseDevice(device);
+
+    UnloadSound();
 }

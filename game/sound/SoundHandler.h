@@ -18,10 +18,10 @@ public:
     ALuint buffer;
 
     // sound
-    ALsizei size, freq;
-    ALenum format;
-    ALvoid *data;
-    ALboolean loop = AL_FALSE;
+    char* data;
+    int channel, sampleRate, bps, size;
+
+    SoundHandler();
 
     void OpenDevice();
 
@@ -31,5 +31,11 @@ public:
 
     void GenerateBuffer();
 
-    void LoadSound(std::__cxx11::basic_string<char> filepath);
+    void LoadSound(std::string filepath);
+
+    void UnloadSound() const;
+
+    ~SoundHandler();
+
+    void Play();
 };
