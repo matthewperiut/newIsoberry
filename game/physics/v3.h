@@ -49,23 +49,13 @@ struct v3 {
 
     olc::vf2d toScreen(olc::vf2d offset, bool noStart = false)
     {
-        olc::vf2d ScreenPos{ (float(settings.resolution.x)/2+1) + offset.x, (float(settings.resolution.y)/2+18) + offset.y };
-        ScreenPos.x += x;
-        ScreenPos.y += x / 2;
-        ScreenPos.x += z;
-        ScreenPos.y -= z / 2;
-        ScreenPos.y -= y;
-        return ScreenPos;
+        static olc::vf2d ScreenPos{ (float(settings.resolution.x)/2+1) + offset.x, (float(settings.resolution.y)/2+18) + offset.y };
+        return olc::vf2d(x-z,(x/2)+(z/2)-y)+ScreenPos;
     }
 
     olc::vf2d toScreenNoCentering()
     {
-        olc::vf2d ScreenPos{ 0, 15 };
-        ScreenPos.x += x;
-        ScreenPos.y += x / 2;
-        ScreenPos.x += z;
-        ScreenPos.y -= z / 2;
-        ScreenPos.y -= y;
-        return ScreenPos;
+        static olc::vf2d ScreenPos{ 0, 15 };
+        return olc::vf2d(x-z,(x/2)+(z/2)-y)+ScreenPos;
     }
 };

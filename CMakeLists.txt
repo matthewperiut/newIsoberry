@@ -17,18 +17,14 @@ endif(${CMAKE_SYSTEM} MATCHES "Linux")
 
 file (GLOB MY_SRC
         "main.cpp"
-        "game/network/*.cpp"
-        "game/network/*.h"
-        "game/physics/*.cpp"
-        "game/physics/*.h"
-        "game/sound/*.cpp"
-        "game/sound/*.h"
         "game/tools/settings/*.cpp"
-        "game/tools/settings/*.h"
         "game/tools/asset/*.cpp"
-        "game/tools/asset/*.h"
-        "game/*.cpp"
-        "game/*.h")
+        "game/external/png/*.cpp"
+        "game/network/*.cpp"
+        "game/physics/*.cpp"
+        "game/sound/*.cpp"
+        "game/file/*.cpp"
+        "game/*.cpp")
 
 if (WIN32)
     add_executable(Isoberry WIN32 ${MY_SRC} "${CMAKE_CURRENT_SOURCE_DIR}/game/icon/isoberry.rc")
