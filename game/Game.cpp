@@ -7,31 +7,28 @@
 
 #include "Game.h"
 #include "sound/SoundHandler.h"
-#include "physics/v3.h"
 #include "physics/Collider.h"
-#include "physics/Box.h"
+#include "draw/Draw.h"
 
 SoundHandler soundHandler;
 
-Collider c(v3(1,1,1),v3(20,20,10));
-bool Game::OnUserCreate() {
+
+bool Game::OnUserCreate()
+{
     sAppName = "Isoberry";
     soundHandler.LoadSound(GetAssetPath() + "test.wav");
 
-    for(int i = 0; i < 12; i++)
-    {
-        DrawLine(c.CornerToScreen(box[i][0][0],box[i][0][1],box[i][0][2]),
-                 c.CornerToScreen(box[i][1][0],box[i][1][1],box[i][1][2]));
-    }
-
-    std::cout << c.Get2DSize() << std::endl;
-    Draw(c.CornerToScreen(0,1,0),olc::RED);
+    Collider c(v3(1,1,1),v3(20,20,10));
+    SetGameEngine(*this);
+    draw(c);
 
     return 1;
 }
 
-v3 pos;
-bool Game::OnUserUpdate(float fElapsedTime) {
+bool Game::OnUserUpdate(float fElapsedTime)
+{
+    static v3 pos;
+
     if (GetKey(olc::ESCAPE).bPressed)
         return 0;
     if (GetKey(olc::F).bPressed)
@@ -52,6 +49,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
     return 1;
 }
 
-bool Game::OnUserDestroy() {
+bool Game::OnUserDestroy()
+{
     return 1;
 }
