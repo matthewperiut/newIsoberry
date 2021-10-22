@@ -21,6 +21,8 @@ file (GLOB MY_SRC
         "game/network/*.h"
         "game/physics/*.cpp"
         "game/physics/*.h"
+        "game/sound/*.cpp"
+        "game/sound/*.h"
         "game/tools/settings/*.cpp"
         "game/tools/settings/*.h"
         "game/tools/asset/*.cpp"

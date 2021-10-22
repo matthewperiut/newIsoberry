@@ -7,8 +7,6 @@
 
 #include "Game.h"
 
-#include <AL/alc.h>
-
 #include <list>
 
 int snd;
