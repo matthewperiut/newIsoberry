@@ -6,6 +6,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <cstring>
 
 bool isBigEndian()
 {

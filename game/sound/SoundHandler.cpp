@@ -83,7 +83,7 @@ void SoundHandler::LoadSound(std::string filepath)
 {
     alcMakeContextCurrent(context);
     data = LoadWAV(filepath.c_str(), channel, sampleRate, bps, size);
-    uint8_t format;
+    int format;
     if (channel == 1)
     {
         if (bps == 8)
