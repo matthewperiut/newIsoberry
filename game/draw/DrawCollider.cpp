@@ -15,4 +15,8 @@ void draw(Collider& collider)
                                     collider.CornerToScreen(box[i][1][0],box[i][1][1],box[i][1][2]));
         }
     }
+    if(collider.type == "collider_decal")
+    {
+        CurrentEngine->DrawDecal(collider.GetTopLeft(), reinterpret_cast<olc::Decal*>(collider.ptr[0]));
+    }
 }
