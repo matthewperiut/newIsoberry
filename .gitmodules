@@ -1,3 +1,6 @@
 [submodule "game/external/yojimbo"]
 	path = game/external/yojimbo
 	url = https://github.com/networkprotocol/yojimbo.git
+[submodule "game/external/openal-soft"]
+	path = game/external/openal-soft
+	url = https://github.com/kcat/openal-soft.git

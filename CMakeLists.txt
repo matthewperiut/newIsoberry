@@ -76,6 +76,9 @@ endif()
 add_subdirectory(game/external/yojimbo EXCLUDE_FROM_ALL)
 target_link_libraries(Isoberry PRIVATE yojimbo)
 
+add_subdirectory(game/external/openal-soft EXCLUDE_FROM_ALL)
+target_link_libraries(Isoberry PRIVATE openal-soft)
+
 if (UNIX)
     # X11
     if(LINUX)
