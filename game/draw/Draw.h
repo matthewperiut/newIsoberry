@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#import "../physics/Collider.h"
+#include "../physics/Collider.h"
 
 extern olc::PixelGameEngine* CurrentEngine;
 
