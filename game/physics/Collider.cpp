@@ -6,7 +6,23 @@
 
 Collider::Collider(v3 position, v3 size) : position(position), size(size)
 {
+    type = "collider";
+}
 
+bool Collider::isColliding(Collider &c)
+{
+    Collider& a = c;
+    Collider& b = *this;
+
+    bool result = true;
+
+    for(int i = 0; i < 3; i++)
+    {
+        //https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_collision_detection
+        result *= a.min(i) < b.max(i) && a.max(i) > b.min(i);
+    }
+
+    return result;
 }
 
 float Collider::min(int axis)

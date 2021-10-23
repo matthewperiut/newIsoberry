@@ -15,13 +15,16 @@ public:
     v3 size;
 public:
     // Special functionality
-    std::string type = "collider";
+    std::string type;
     void* ptr[3];
 public:
     // Camera
     olc::vf2d* camera = nullptr;
 public:
     Collider(v3 position, v3 size);
+
+    // Fundamental usage of Collider
+    bool isColliding(Collider &c);
 
     // Find Bounds of the Box
     float min(int axis);

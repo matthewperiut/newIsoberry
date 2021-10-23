@@ -46,7 +46,7 @@ struct v3 {
     bool operator != (const v3& rhs) const { return (this->x != rhs.x || this->y != rhs.y || this->z == rhs.z); }
     const std::string str() const { return std::string("(" + std::to_string(this->x) + "," + std::to_string(this->y) + "," + std::to_string(this->z) + ")"); }
     friend std::ostream& operator << (std::ostream& os, const v3& rhs) { os << rhs.str(); return os; }
-
+    float& get(int axis) { return (axis == 0 ? x : (axis == 1 ? y : z)); }
     olc::vf2d toScreen(olc::vf2d offset, bool noStart = false)
     {
         static olc::vf2d ScreenPos{ (float(settings.resolution.x)/2+1) + offset.x, (float(settings.resolution.y)/2+18) + offset.y };

@@ -10,22 +10,28 @@
 #include "physics/Collider.h"
 #include "draw/Draw.h"
 #include "tools/asset/AssetBank.h"
+#include "physics/Kinematic.h"
 #include <iostream>
 
 AssetBank assetBank;
 
 SoundHandler soundHandler;
 
-Collider c(v3(1,1,1),v3(11,25,12));
-int id;
+Kinematic c(v3(0,90,0),v3(10,10,10));
+std::vector<Collider*> Colliders;
+int assetId;
 bool Game::OnUserCreate()
 {
     sAppName = "Isoberry";
     soundHandler.LoadSound(GetAssetPath() + "test.wav");
 
-    id = assetBank.LoadPNG(GetAssetPath() + "test/11x25x12TrashBin.png");
-    c.type = "collider_decal";
-    c.ptr[0] = assetBank.GetDecal(id);
+    Colliders.push_back(new Collider(v3(0, 40, 0),v3(10,10,10)));
+
+    assetId = assetBank.LoadPNG(GetAssetPath() + "test/11x25x12TrashBin.png");
+    //c.type = "collider_decal";
+    //c.ptr[0] = assetBank.GetDecal(assetId);
+    c.velocity = v3(0,-20,0);
+    c.SetListOfColliders(Colliders);
 
     SetGameEngine(*this);
     return 1;
@@ -51,13 +57,16 @@ bool Game::OnUserUpdate(float fElapsedTime)
     if (GetKey(olc::SPACE).bHeld)
         pos.y += 0.25;
 
+    Clear(olc::BLACK);
+    c.Update(fElapsedTime);
     draw(c);
+    draw(*Colliders[0]);
     Draw(pos.toScreen(olc::vf2d(0,0)));
     return 1;
 }
 
 bool Game::OnUserDestroy()
 {
-    assetBank.DeleteImage(id);
+    assetBank.DeleteImage(assetId);
     return 1;
 }
