@@ -21,6 +21,8 @@ file (GLOB MY_SRC
         "game/tools/asset/*"
         "game/external/png/*"
         "game/network/*"
+        "game/network/server/*"
+        "game/network/client/*"
         "game/physics/*"
         "game/sound/*"
         "game/file/*"
@@ -44,7 +46,7 @@ if (APPLE)
     set(MACOSX_BUNDLE_ICON_FILE isoberry.icns)
     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game/assets/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Isoberry.app/Contents/assets)
 
-    set(myApp_ICON ${CMAKE_CURRENT_SOURCE_DIR}/game/icon/isoberry.icns)
+    set(myApp_ICON ${CMAKE_CURRENT_SOURCE_DIR}/game/icon/isoberry.icns game/network/TestMessage.h)
     set_source_files_properties(${myApp_ICON} PROPERTIES
             MACOSX_PACKAGE_LOCATION "Resources")
 
