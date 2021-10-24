@@ -9,6 +9,14 @@
 int AssetBank::LoadPNG(std::string path)
 {
     int id = Sprites.size();
+
+    for(int i = 0; i < filepath.size(); i++)
+    {
+        if(filepath[i] == path)
+            return i;
+    }
+
+    filepath.push_back(path);
     Sprites.push_back(new olc::Sprite(path));
     Decals.push_back(new olc::Decal(reinterpret_cast<olc::Sprite*>(Sprites[id])));
     return id;
@@ -16,8 +24,11 @@ int AssetBank::LoadPNG(std::string path)
 
 void AssetBank::DeleteImage(int id)
 {
+    filepath.erase(filepath.begin()+id);
     delete reinterpret_cast<olc::Sprite*>(Sprites[id]);
+    Sprites.erase(Sprites.begin()+id);
     delete reinterpret_cast<olc::Decal*>(Decals[id]);
+    Decals.erase(Decals.begin()+id);
 }
 
 void* AssetBank::GetSprite(int id)
