@@ -1,12 +1,15 @@
 #include "SaveSprite.h"
+
+#include "../external/olcPixelGameEngine.h"
 #include "../external/png/svpng.h"
 #include "../external/png/lodepng.h"
 
-#include <vector>
-#include <iostream>
-#include <thread>
+#include <ostream>
+#include <fstream>
 #include <string>
+#include <vector>
 
+using namespace std;
 using namespace olc;
 
 // Thank you lode png for compression
@@ -78,7 +81,7 @@ void compress(std::string filepath) {
 // Thank you svpng for giving me the ability to save
 void save(Sprite* spr, std::string filepath)
 {
-    std::vector<unsigned char>* v = new std::vector<unsigned char>;
+    auto* v = new std::vector<unsigned char>;
     v->reserve(spr->width * spr->height * 4);
 
     FILE* fp = fopen(filepath.c_str(), "wb");
@@ -109,7 +112,7 @@ void save(Sprite* spr, std::string filepath)
     unsigned char* a = &(*v)[0];
         svpng(fp, spr->width, spr->height, a, 1);
         fclose(fp);
-        compress(filepath);
+        //compress(filepath);
         delete v;
 }
 

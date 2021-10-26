@@ -49,13 +49,12 @@ struct v3 {
     float& get(int axis) { return (axis == 0 ? x : (axis == 1 ? y : z)); }
     olc::vf2d toScreen(olc::vf2d offset, bool noStart = false)
     {
-        static olc::vf2d ScreenPos{ (float(settings.resolution.x)/2+1) + offset.x, (float(settings.resolution.y)/2+18) + offset.y };
-        return olc::vf2d(x-z,(x/2)+(z/2)-y)+ScreenPos;
+        olc::vf2d ScreenPos{ (float(settings.resolution.x)/2+1), (float(settings.resolution.y)/2+18)};
+        return olc::vf2d(x-z,(x/2)+(z/2)-y)+ScreenPos+offset;
     }
 
     olc::vf2d toScreenNoCentering()
     {
-        static olc::vf2d ScreenPos{ 0, 15 };
-        return olc::vf2d(x-z,(x/2)+(z/2)-y)+ScreenPos;
+        return {x-z,(x/2)+(z/2)-y};
     }
 };
