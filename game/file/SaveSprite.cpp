@@ -90,7 +90,7 @@ void save(Sprite* spr, std::string filepath)
     {
         std::string folder = filepath.substr(0,lastSlashIndex);
         if(!std::filesystem::exists(folder))
-            std::filesystem::create_directories(filepath);
+            std::filesystem::create_directories(folder);
     }
 
 
