@@ -81,39 +81,35 @@ void compress(std::string filepath) {
 // Thank you svpng for giving me the ability to save
 void save(Sprite* spr, std::string filepath)
 {
-    auto* v = new std::vector<unsigned char>;
-    v->reserve(spr->width * spr->height * 4);
+    int lastSlashIndex;
+    for(int i = 0; i < filepath.length(); i++)
+    {
+        if(filepath[i] == '/')
+            lastSlashIndex = i;
+    }
+    {
+        std::string folder = filepath.substr(0,lastSlashIndex);
+        if(!std::filesystem::exists(folder))
+            std::filesystem::create_directories(filepath);
+    }
 
-    FILE* fp = fopen(filepath.c_str(), "wb");
-    for (int y = 0; y < spr->height; y++)
-        for (int x = 0; x < spr->width; x++)
-        {
-            Pixel color = spr->GetPixel(vi2d(x, y));
-            for (int c = 0; c < 4; c++)
-            {
-                switch (c)
-                {
-                    case 0: //r
-                    v->push_back(color.r);
-                    break;
-                    case 1: //g
-                    v->push_back(color.g);
-                    break;
-                    case 2: //b
-                    v->push_back(color.b);
-                    break;
-                    case 3: //a
-                    v->push_back(color.a);
-                    break;
-                }
-            }
+
+    auto* rgba = static_cast<unsigned char *>(malloc(spr->width * spr->height * 4 * sizeof(unsigned char))), *p = rgba;
+    unsigned x, y;
+
+    FILE *fp = fopen(filepath.c_str(), "wb");
+    for (y = 0; y < spr->height; y++)
+        for (x = 0; x < spr->width; x++) {
+            olc::Pixel color = spr->GetPixel(x,y);
+            *p++ = color.r;    /* R */
+            *p++ = color.g;    /* G */
+            *p++ = color.b;    /* B */
+            *p++ = color.a;    /* A */
         }
-
-    unsigned char* a = &(*v)[0];
-        svpng(fp, spr->width, spr->height, a, 1);
-        fclose(fp);
-        //compress(filepath);
-        delete v;
+    svpng(fp, spr->width, spr->height, rgba, 1);
+    fclose(fp);
+    free(rgba);
+    compress(filepath);
 }
 
 void SaveSprite(Sprite* spr, std::string filepath)

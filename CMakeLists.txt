@@ -30,7 +30,8 @@ file (GLOB MY_SRC
         "game/*")
 
 if (WIN32)
-    add_executable(Isoberry WIN32 ${MY_SRC} "${CMAKE_CURRENT_SOURCE_DIR}/game/icon/isoberry.rc")
+    #add_executable(Isoberry WIN32 ${MY_SRC} "${CMAKE_CURRENT_SOURCE_DIR}/game/icon/isoberry.rc")
+    add_executable(Isoberry ${MY_SRC} "${CMAKE_CURRENT_SOURCE_DIR}/game/icon/isoberry.rc")
     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game/icon/isoberry.ico DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets/)
     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game/assets/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets/)
 elseif(LINUX)

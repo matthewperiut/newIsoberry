@@ -10,7 +10,7 @@ Settings settings(GetAssetPath() + "settings.txt");
 #include <mbedtls/version.h>
 
 #ifdef WIN32
-#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 #endif
 
 void TemporaryCMD(bool& running)
