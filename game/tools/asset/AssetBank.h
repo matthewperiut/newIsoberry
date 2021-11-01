@@ -20,4 +20,6 @@ public:
 
     void *GetSprite(int id);
     void *GetDecal(int id);
+
+    ~AssetBank();
 };

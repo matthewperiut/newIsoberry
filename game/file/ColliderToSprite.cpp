@@ -8,6 +8,7 @@
 
 olc::Sprite* CreateSpriteDebugDraw(Collider& collider, olc::Pixel outlineColor)
 {
+
     olc::vf2d sprSize = collider.Get2DSize();
     auto* colliderSprite = new olc::Sprite(sprSize.x+1, sprSize.y+1);
     for(int i = 0; i < colliderSprite->width; i++)

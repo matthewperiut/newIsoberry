@@ -40,3 +40,11 @@ void* AssetBank::GetDecal(int id)
 {
     return Decals[id];
 }
+
+AssetBank::~AssetBank()
+{
+    for(int i = 0; i < Sprites.size(); i++)
+    {
+        DeleteImage(i);
+    }
+}

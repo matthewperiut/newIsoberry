@@ -19,7 +19,7 @@ AssetBank assetBank;
 
 SoundHandler soundHandler;
 
-Kinematic c(v3(0,90,0),v3(5,5,5));
+Kinematic c(v3(32,90,32),v3(8,8,8));
 std::vector<Collider*> Colliders;
 int assetId;
 Sprite* temp = CreateSpriteDebugDraw(c,olc::WHITE);
@@ -28,7 +28,30 @@ bool Game::OnUserCreate()
     sAppName = "Isoberry";
     soundHandler.LoadSound(GetAssetPath() + "test.wav");
 
-    Colliders.push_back(new Collider(v3(0, 40, 0),v3(10,10,10)));
+    bool where[5][5] = {{0,1,1,1,0},
+                        {1,1,1,1,0},
+                        {1,1,1,1,0},
+                        {1,1,1,0,0},
+                        {0,0,0,0,0}};
+
+    assetId = assetBank.LoadPNG(GetAssetPath() + "debugtile.png");
+    int depth = 5;
+    int ct = 5;
+    for(int j = 0; j < depth; j++)
+    {
+        for(int i = 0; i < ct; i++)
+        {
+            if(where[j][i])
+            {
+                Colliders.push_back(new Collider(v3(0, 40, 0),v3(16,4,16)));
+
+                Colliders[Colliders.size()-1]->type = "collider_decal";
+                Colliders[Colliders.size()-1]->ptr[0] = assetBank.GetDecal(0);
+                Colliders[Colliders.size()-1]->position = v3(i*16,40,j*16);
+            }
+        }
+    }
+
 
     std::cout << temp->width << " " << temp->height << std::endl;
 
@@ -36,9 +59,9 @@ bool Game::OnUserCreate()
     //std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     //delete temp;
 
-    assetId = assetBank.LoadPNG(GetAssetPath() + "test/11x25x12TrashBin.png");
-    //c.type = "collider_decal";
-    //c.ptr[0] = assetBank.GetDecal(assetId);
+    c.type = "collider_decal";
+    assetId = assetBank.LoadPNG(GetAssetPath() + "crate.png");
+    c.ptr[0] = assetBank.GetDecal(assetId);;
     c.velocity = v3(0,-20,0);
     c.SetListOfColliders(Colliders);
 
@@ -49,36 +72,50 @@ bool Game::OnUserCreate()
 
 bool Game::OnUserUpdate(float fElapsedTime)
 {
-    static v3 pos;
-
     if (GetKey(olc::ESCAPE).bPressed)
         return 0;
     if (GetKey(olc::F).bPressed)
         soundHandler.Play();
 
     if (GetKey(olc::A).bHeld)
-        pos.x -= 0.25;
+        c.position.x -= 0.25;
     if (GetKey(olc::D).bHeld)
-        pos.x += 0.25;
+        c.position.x += 0.25;
     if (GetKey(olc::W).bHeld)
-        pos.z -= 0.25;
+        c.position.z -= 0.25;
     if (GetKey(olc::S).bHeld)
-        pos.z += 0.25;
+        c.position.z += 0.25;
     if (GetKey(olc::SPACE).bHeld)
-        pos.y += 0.25;
+        c.position.y += 0.25;
 
-    Clear(olc::BLACK);
+    Clear(olc::Pixel(35,33,61));
     c.Update(fElapsedTime);
-    draw(c);
-    draw(*Colliders[0]);
-    Draw(pos.toScreen(olc::vf2d(0,0)));
 
-    DrawSprite(vi2d(100,100), temp);
+    if(c.position.y < 40)
+        draw(c);
+
+    for(int i = 0; i < Colliders.size(); i++)
+    {
+        draw(*Colliders[i]);
+
+        if(GetKey(olc::Key::X).bPressed)
+            Colliders[i]->type = "collider";
+        if(GetKey(olc::Key::Z).bPressed)
+            Colliders[i]->type = "collider_decal";
+    }
+
+    if(c.position.y > 40)
+        draw(c);
+
+
+
+    //DrawDecal(olc::vi2d(0,0),reinterpret_cast<olc::Decal*>(Colliders[0]->ptr[0]));
+
+    //DrawSprite(vi2d(100,100), temp);
     return 1;
 }
 
 bool Game::OnUserDestroy()
 {
-    assetBank.DeleteImage(assetId);
     return 1;
 }
