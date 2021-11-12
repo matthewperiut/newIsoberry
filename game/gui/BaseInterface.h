@@ -11,8 +11,7 @@ using namespace olc;
 class BaseInterface
 {
 private:
-    olc::Key opening = olc::Key::P;
-
+    bool startedHolding = false;
     bool holding = false;
     bool hidden = true;
 
@@ -20,6 +19,7 @@ private:
     vi2d displacement{0,0};
     vi2d closeButtonLocation{-8,-8};
 public:
+    olc::Key opening = olc::Key::P;
     std::string title = "none";
 
     bool resize = false;
@@ -38,7 +38,7 @@ public:
 
 public:
     void Resizing(PixelGameEngine& g);
-    void Closing(PixelGameEngine& g);
+    bool Closing(PixelGameEngine& g);
     void Dragging(PixelGameEngine& g);
 
     void DrawBox(PixelGameEngine &g);

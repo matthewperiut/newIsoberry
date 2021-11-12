@@ -8,6 +8,8 @@
 
 Settings::Settings(std::string file)
 {
+    filename = file;
+    vi2d screenSize = GetResolution();
     resolution = vi2d(NATIVESCREENWIDTH, NATIVESCREENHEIGHT);
 
     if(!std::filesystem::exists(file))
@@ -26,8 +28,15 @@ Settings::Settings(std::string file)
         }
         if(output == "resolution")
         {
-            mySettingsFile >> resolution.x >> resolution.y;
-            resolution = ConvertToHeight(resolution, scale);
+            mySettingsFile >> oldRes.x >> oldRes.y;
+            if(!oldRes.x < NATIVESCREENWIDTH && !oldRes.y < NATIVESCREENHEIGHT)
+            {
+                if(!oldRes.x > screenSize.x && !oldRes.x > screenSize.y)
+                {
+                    resolution = ConvertToHeight(oldRes, scale);
+                }
+            }
+            oldRes = {0,0};
         }
         if(output == "vsync")
         {
@@ -36,7 +45,18 @@ Settings::Settings(std::string file)
     }
     if (fullscreen)
     {
-        resolution = GetResolution();
+        oldRes = resolution;
+        resolution = screenSize;
     }
     mySettingsFile.close();
+}
+
+Settings::~Settings()
+{
+    std::filesystem::remove(filename);
+    std::ofstream mySettingsFile(filename);
+    mySettingsFile << "fullscreen " << fullscreen << '\n';
+    vi2d& res = oldRes.x != 0 ? oldRes : resolution;
+    mySettingsFile << "resolution " << res.x*scale << " " << res.y*scale << '\n';
+    mySettingsFile << "vsync " << vsync << '\n';
 }

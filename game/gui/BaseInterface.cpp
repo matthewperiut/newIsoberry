@@ -5,18 +5,18 @@
 #include "BaseInterface.h"
 #include "../tools/asset/AssetPath.h"
 
-static std::vector<void*> interfaces;
-static vi2d mousePos;
+std::vector<void*> interfaces;
+vi2d mousePos;
 
-static bool initialized;
-static olc::Pixel color{255,255,255,128};
-static olc::Pixel textColor{0,0,0,255};
-static Sprite* buttonSpr;
-static Sprite* cornerSpr;
-static Sprite* singleSpr;
-static Decal* button;
-static Decal* corner;
-static Decal* single;
+bool initialized;
+olc::Pixel color{255,255,255,128};
+olc::Pixel textColor{0,0,0,255};
+Sprite* buttonSpr;
+Sprite* cornerSpr;
+Sprite* singleSpr;
+Decal* button;
+Decal* corner;
+Decal* single;
 
 BaseInterface::BaseInterface()
 {
@@ -85,13 +85,26 @@ void BaseInterface::DrawAll(PixelGameEngine &g)
     for(int i = 0; i < interfaces.size(); i++)
     {
         BaseInterface& base = *reinterpret_cast<BaseInterface*>(interfaces[i]);
-        base.Closing(g);
+        if(base.Closing(g))
+        {
+            // This trick is to ensure the latest opened window is put on top
+            interfaces.erase(interfaces.begin()+i);
+            interfaces.push_back(reinterpret_cast<void*>(&base));
+            break;
+        }
         if(base.hidden)
             continue;
         base.Dragging(g);
         base.DrawBox(g);
         base.Resizing(g);
         base.Functionality(g);
+        if(base.startedHolding)
+        {
+            base.startedHolding = false;
+            interfaces.erase(interfaces.begin()+i);
+            interfaces.push_back(reinterpret_cast<void*>(&base));
+            break;
+        }
     }
 }
 
@@ -105,12 +118,17 @@ void BaseInterface::Resizing(PixelGameEngine &g)
     // No need for this atm.
 }
 
-void BaseInterface::Closing(PixelGameEngine &g)
+bool BaseInterface::Closing(PixelGameEngine &g)
 {
     if(g.GetKey(opening).bPressed)
+    {
         hidden = !hidden;
+        if(!hidden)
+            return true;
+    }
+
     if(hidden)
-        return;
+        return false;
     if (g.GetMouse(0).bPressed)
     {
         if (mousePos.x > closeButtonLocation.x && mousePos.y > closeButtonLocation.y)
@@ -122,6 +140,7 @@ void BaseInterface::Closing(PixelGameEngine &g)
             }
         }
     }
+    return false;
 }
 
 void BaseInterface::Dragging(PixelGameEngine &g)
@@ -132,6 +151,7 @@ void BaseInterface::Dragging(PixelGameEngine &g)
         {
             if (mousePos.x < windowPos.x + windowSize.x && mousePos.y < windowPos.y + cs.y)
             {
+                startedHolding = true;
                 holding = true;
                 displacement = windowPos - mousePos;
             }

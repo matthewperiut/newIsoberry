@@ -9,8 +9,13 @@
 class Checkbox
 {
 public:
+    Checkbox(bool& boolean);
+
     olc::vi2d position;
-    bool state = false;
+    bool* state;
 
     void Draw(olc::PixelGameEngine &g);
+
+    static void Initialize();
+    static void Deinitialize();
 };

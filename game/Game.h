@@ -12,6 +12,7 @@ using namespace olc;
 class Game : public PixelGameEngine
 {
     SettingsInterface inter;
+    BaseInterface basisInter;
 
     bool OnUserCreate() override;
     bool OnUserUpdate(float fElapsedTime) override;
