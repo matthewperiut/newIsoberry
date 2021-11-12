@@ -21,6 +21,7 @@ file (GLOB MY_SRC
         "game/tools/asset/*"
         "game/external/png/*"
         "game/network/*"
+        "game/gui/*"
         "game/network/server/*"
         "game/network/client/*"
         "game/physics/*"

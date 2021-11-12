@@ -13,6 +13,7 @@
 #include "physics/Kinematic.h"
 #include "file/ColliderToSprite.h"
 #include "file/SaveSprite.h"
+#include "gui/BaseInterface.h"
 #include <iostream>
 
 AssetBank assetBank;
@@ -27,7 +28,7 @@ bool Game::OnUserCreate()
 {
     sAppName = "Isoberry";
     soundHandler.LoadSound(GetAssetPath() + "test.wav");
-
+    BaseInterface::Initialize();
     bool where[5][5] = {{0,1,1,1,0},
                         {1,1,1,1,0},
                         {1,1,1,1,0},
@@ -72,6 +73,7 @@ bool Game::OnUserCreate()
 
 bool Game::OnUserUpdate(float fElapsedTime)
 {
+    /*
     if (GetKey(olc::ESCAPE).bPressed)
         return 0;
     if (GetKey(olc::F).bPressed)
@@ -106,9 +108,9 @@ bool Game::OnUserUpdate(float fElapsedTime)
 
     if(c.position.y > 40)
         draw(c);
+*/
 
-
-
+    BaseInterface::DrawAll(*this);
     //DrawDecal(olc::vi2d(0,0),reinterpret_cast<olc::Decal*>(Colliders[0]->ptr[0]));
 
     //DrawSprite(vi2d(100,100), temp);
@@ -117,5 +119,6 @@ bool Game::OnUserUpdate(float fElapsedTime)
 
 bool Game::OnUserDestroy()
 {
+    BaseInterface::Deinitialize();
     return 1;
 }
